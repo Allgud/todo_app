@@ -1,5 +1,7 @@
 import React from 'react'
 
+import './taskFilters.css'
+
 const TaskFilters = () => {
     return (
         <ul className="filters">

@@ -2,6 +2,8 @@ import React from 'react'
 
 import TaskFilters from '../TaskFilters/TaskFilters'
 
+import './footer.css'
+
 const Footer = () => {
     return (
         <footer className="footer">

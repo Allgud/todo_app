@@ -1,5 +1,7 @@
 import React from "react";
 
+import './listItem.css'
+
 const Task = () => {
     return (
         <li className="completed">

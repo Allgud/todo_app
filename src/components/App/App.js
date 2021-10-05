@@ -4,13 +4,15 @@ import TaskList from '../TaskList/TaskList'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 
+import './app.css'
+
 function App(){
     return (
-        <div>
+        <section className="todoapp">
             <Header />
             <TaskList />
             <Footer />
-        </div>
+        </section>
     )
 }
 
