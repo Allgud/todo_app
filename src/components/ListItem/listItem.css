@@ -52,9 +52,9 @@ li.editing .edit {
   margin: 0 0 0 43px;
 }
 
-li.editing .view {
+/*li.editing .view {
   display: none;
-}
+}*/
 
 li .toggle {
   text-align: center;

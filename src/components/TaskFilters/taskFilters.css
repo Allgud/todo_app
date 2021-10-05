@@ -19,6 +19,7 @@
   text-decoration: none;
   border: 1px solid transparent;
   border-radius: 3px;
+  font-size: 15px;
 }
 
 .filters li button:not(.selected) {

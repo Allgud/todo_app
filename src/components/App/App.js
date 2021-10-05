@@ -7,6 +7,7 @@ import Footer from '../Footer/Footer'
 import './app.css'
 
 function App(){
+    
     return (
         <section className="todoapp">
             <Header />
