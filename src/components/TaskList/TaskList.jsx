@@ -1,17 +1,24 @@
 import React from "react";
 
-import Task from "../ListItem/ListItem";
+import Task from "../Task/Task";
 
 import './taskList.css'
 
-const TaskList = () => {
+const TaskList = (props) => {
 
-  const items = ['Completed task', 'Editing task', 'Active task']
-
+  const { data, onDeleted } = props
+  
   return (
     <section className="main">
       <ul className="todo-list">
-        <Task items={items}/>
+        {data.map(el => {
+          return (
+          <Task 
+            label={el.label}
+            key={el.id}
+            onDeleted={() => onDeleted(el.id)}
+          />)
+        })}
       </ul>
     </section> 
   )
