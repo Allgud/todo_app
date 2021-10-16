@@ -1,27 +1,35 @@
-import React from "react";
+import React, { Component } from "react";
 
 import Task from "../Task/Task";
 
 import './taskList.css'
 
-const TaskList = (props) => {
+export default class TaskList extends Component {
 
-  const { data, onDeleted } = props
+  render(){
+    const { data, onDeleted, onToggleDone } = this.props
+
+    const elements = data.map((el, i) => {
+      const { id, ...elProps } = el
+      
+    return (
+        <Task
+          key={ i }
+          { ...elProps }
+          onDeleted={() => onDeleted(id)}
+          onToggleDone={() => onToggleDone(id)}
+        />
+    )
+  })
   
   return (
     <section className="main">
       <ul className="todo-list">
-        {data.map(el => {
-          return (
-          <Task 
-            label={el.label}
-            key={el.id}
-            onDeleted={() => onDeleted(el.id)}
-          />)
-        })}
+        {elements}
       </ul>
     </section> 
   )
+  }  
 }
 
-export default TaskList
+

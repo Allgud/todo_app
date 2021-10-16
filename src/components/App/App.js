@@ -4,28 +4,42 @@ import ReactDOM from 'react-dom'
 import TaskList from '../TaskList/TaskList'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
+import NewTaskForm from '../NewTaskForm/NewTaskForm'
 
 import './app.css'
-import NewTaskForm from '../NewTaskForm/NewTaskForm'
 
 class App extends Component {
 
+    idGenerator = 5
+
     state = {
         data: [
-            {label: "Completed task", id: 1},
-            {label: "Editing task", id: 2},
-            {label: "Active task", id: 3},
-            {label: "Something else", id: 4}
-        ]
+            {label: "Completed task", id: 1, done: false},
+            {label: "Editing task", id: 2, done: false},
+            {label: "Active task", id: 3, done: false},
+            {label: "Something else", id: 4, done: false},
+        ], 
+
+        status: 'all'
+    }
+
+    filtered = this.state.data
+
+    createTask = (label) => {
+        return {
+            label: label[0].toUpperCase() + label.slice(1),
+            id: this.idGenerator++,
+            done: false
+        }
+    }
+
+    sliceArr = (arr, index, item) => {
+        return item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] : [...arr.slice(0, index), ...arr.slice(index + 1)]
     }
 
     deleteItem = (id) => {
         this.setState(({data}) => {
-            const idx = data.findIndex((el) => el.id === id )
-            const newList = [
-                ...data.slice(0, idx), 
-                ...data.slice(idx + 1)
-            ]
+            const newList = data.filter(el => el.id !== id)
             return {
                 data: newList
             }
@@ -33,23 +47,83 @@ class App extends Component {
     }
 
     addItem = (text) => {
-        console.log(`Added: ${text}`);
+        if(!text) return
+        const newTask = this.createTask(text)
+        this.setState(({data}) => {
+            const newData = [...data, newTask]
+            return {
+                data: newData
+            }
+        })
     }
 
-    render(){
+    clearCompleted = () => {
+        this.setState(({ data }) => {
+            const notCompleted = data.filter(el => el.done === false)
+            return {
+                data: notCompleted
+            }
+        })
+    }
 
-        const { data } = this.state
+    onToggleDone = (id) => {
+        
+        this.setState(({ data }) => {  
+            const index = data.findIndex(el => el.id === id)
+            let old = data[index] 
+            
+            const newItem = {...old, done: !old.done} 
+            const newArr = this.sliceArr(data, index, newItem)
+            return {
+                data: newArr
+            }
+        })
+    }
+
+    onFiltered = (status) => {
+        const arr = this.state.data
+        if(status === 'active'){
+            this.status += 'active'
+            return arr.filter(el => el.done !== true)
+        }
+        if(status === 'completed'){
+            this.status += 'complete'
+            return arr.filter(el => el.done === true)
+        }
+        this.status += 'all'
+        return arr
+    }
+    
+    statusListener = (str) => {
+       this.setState({
+           status: str
+       })
+    }
+
+
+    render(){
+        const { data, status } = this.state
+        
+        
+        let filtered = this.onFiltered(status)
+        
         return (
             <section className="todoapp">
-                <Header 
+                <Header />
+                <NewTaskForm 
                     onAdded={ this.addItem }
                 />
-                <NewTaskForm />
                 <TaskList 
-                    data={data}
-                    onDeleted={ this.deleteItem }    
+                    data={ filtered }
+                    onDeleted={ this.deleteItem }
+                    onToggleDone={ this.onToggleDone }    
                 />
-                <Footer />
+                <Footer 
+                    data={ data }
+                    status={ status }
+                    onClearCompleted={ this.clearCompleted }
+                    onFilterClick = { this.statusListener }
+                />
             </section>
         )
     }

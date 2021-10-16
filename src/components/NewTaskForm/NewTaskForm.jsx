@@ -16,11 +16,12 @@ export default class NewTaskForm extends Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    console.log(this.props);
+    this.props.onAdded(this.state.label)
+    this.setState({
+      label: ''
+    })
   }
   
-  
-
   render(){
      
     return (
@@ -33,8 +34,11 @@ export default class NewTaskForm extends Component {
          placeholder="What needs to be done?"
          autoFocus
          onChange={ this.onLabelChange }
+         value={this.state.label}
         />
-      </form> 
+      </form>
+        
+     
     )
   }
 }
