@@ -14,28 +14,26 @@ class App extends Component {
 
     state = {
         data: [
-            {label: "Completed task", id: 1, done: false},
-            {label: "Editing task", id: 2, done: false},
-            {label: "Active task", id: 3, done: false},
-            {label: "Something else", id: 4, done: false},
+            {label: "Completed task", id: 1, done: false, timestamp: Date.now()},
+            {label: "Editing task", id: 2, done: false, timestamp: Date.now()},
+            {label: "Active task", id: 3, done: false, timestamp: Date.now()},
+            {label: "Something else", id: 4, done: false, timestamp: Date.now()},
         ], 
 
         status: 'all'
     }
 
-    filtered = this.state.data
+   
 
-    createTask = (label) => {
-        return {
-            label: label[0].toUpperCase() + label.slice(1),
+    createTask = (label) => ({
+            label: label[0].toUpperCase() + label.slice(1).toLowerCase(),
+            // eslint-disable-next-line no-plusplus
             id: this.idGenerator++,
-            done: false
-        }
-    }
+            done: false,
+            timestamp: Date.now()
+        })
 
-    sliceArr = (arr, index, item) => {
-        return item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] : [...arr.slice(0, index), ...arr.slice(index + 1)]
-    }
+    sliceArr = (arr, index, item) => item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] : [...arr.slice(0, index), ...arr.slice(index + 1)]
 
     deleteItem = (id) => {
         this.setState(({data}) => {
@@ -47,6 +45,7 @@ class App extends Component {
     }
 
     addItem = (text) => {
+        
         if(!text) return
         const newTask = this.createTask(text)
         this.setState(({data}) => {
@@ -70,7 +69,7 @@ class App extends Component {
         
         this.setState(({ data }) => {  
             const index = data.findIndex(el => el.id === id)
-            let old = data[index] 
+            const old = data[index] 
             
             const newItem = {...old, done: !old.done} 
             const newArr = this.sliceArr(data, index, newItem)
@@ -81,6 +80,7 @@ class App extends Component {
     }
 
     onFiltered = (status) => {
+        // eslint-disable-next-line react/destructuring-assignment
         const arr = this.state.data
         if(status === 'active'){
             this.status += 'active'
@@ -103,11 +103,11 @@ class App extends Component {
 
     render(){
         const { data, status } = this.state
-        
-        
-        let filtered = this.onFiltered(status)
+    
+        const filtered = this.onFiltered(status)
         
         return (
+            // eslint-disable-next-line react/jsx-filename-extension
             <section className="todoapp">
                 <Header />
                 <NewTaskForm 

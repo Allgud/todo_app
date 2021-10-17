@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import './newTaskForm.css'
 
@@ -8,14 +9,19 @@ export default class NewTaskForm extends Component {
     label: ''
   }
 
-  onLabelChange = (e) => {
+  static propTypes = {
+    onAdded: PropTypes.func.isRequired
+  }
+
+  onLabelChange = (evt) => {
     this.setState({
-        label: e.target.value
+        label: evt.target.value
     })
   }
 
-  onSubmit = (e) => {
-    e.preventDefault()
+  onSubmit = (evt) => {
+    evt.preventDefault()
+    // eslint-disable-next-line react/destructuring-assignment
     this.props.onAdded(this.state.label)
     this.setState({
       label: ''
@@ -32,8 +38,10 @@ export default class NewTaskForm extends Component {
          type='text'
          className="new-todo"
          placeholder="What needs to be done?"
+         // eslint-disable-next-line jsx-a11y/no-autofocus
          autoFocus
          onChange={ this.onLabelChange }
+         // eslint-disable-next-line react/destructuring-assignment
          value={this.state.label}
         />
       </form>

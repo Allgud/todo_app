@@ -1,14 +1,13 @@
-import React, { Component } from 'react'
+/* eslint-disable react/prop-types */
+import React from 'react'
 
 import TaskFilters from '../TaskFilters/TaskFilters'
 
 import './footer.css'
 
-export default class Footer extends Component {
+const Footer = (props) => {
 
-    render(){
-
-      const { data, onClearCompleted, onFilterClick, status } = this.props
+      const { data, onClearCompleted, onFilterClick, status } = props
        
       return (
           <footer className="footer">
@@ -18,6 +17,7 @@ export default class Footer extends Component {
                 status={ status }
             />
             <button 
+                type="button"
                 className="clear-completed"
                 onClick={ onClearCompleted }
               >Clear completed
@@ -25,6 +25,7 @@ export default class Footer extends Component {
           </footer>
       )
       
-    }
-   
 }
+
+export default Footer
+   

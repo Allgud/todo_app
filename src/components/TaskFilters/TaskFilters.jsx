@@ -1,16 +1,15 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import './taskFilters.css'
 
-export default class TaskFilters extends Component {
+const TaskFilters = (props) => {
   
-  render(){
-
     const buttons = document.querySelectorAll('.filters li button')
   
-    const { status, statusListener } = this.props
+    const { status, statusListener } = props
 
-    for(let btn of buttons){
+    for(const btn of buttons){
       if(btn.textContent.toLowerCase() === status){
         btn.className = 'selected'
       }else {
@@ -23,7 +22,7 @@ export default class TaskFilters extends Component {
       >
         <li>
           <button
-          className='selected'
+          type="button"
           onClick = { () => statusListener('all') }
           >
             All
@@ -31,6 +30,7 @@ export default class TaskFilters extends Component {
         </li>
         <li >
           <button
+          type="button"
            onClick = { () => statusListener('active') }
           >
             Active
@@ -38,6 +38,7 @@ export default class TaskFilters extends Component {
         </li>
         <li>
           <button
+          type="button"
            onClick = { () => statusListener('completed') } 
           >
             Completed
@@ -45,5 +46,12 @@ export default class TaskFilters extends Component {
         </li>
       </ul>
     )
-  }  
+  } 
+  
+TaskFilters.propTypes = {
+  status: PropTypes.string.isRequired,
+  statusListener: PropTypes.func.isRequired
 }
+
+
+export default TaskFilters
