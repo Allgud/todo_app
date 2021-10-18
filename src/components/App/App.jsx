@@ -12,10 +12,10 @@ class App extends Component {
 
     state = {
         data: [
-            {label: "Completed task", id: 1, done: false, timestamp: Date.now()},
-            {label: "Editing task", id: 2, done: false, timestamp: Date.now()},
-            {label: "Active task", id: 3, done: false, timestamp: Date.now()},
-            {label: "Something else", id: 4, done: false, timestamp: Date.now()},
+            {label: "Completed task", id: 1, done: false, timestamp: Date.now(), edit: false},
+            {label: "Editing task", id: 2, done: false, timestamp: Date.now(), edit: false},
+            {label: "Active task", id: 3, done: false, timestamp: Date.now(), edit: false},
+            {label: "Something else", id: 4, done: false, timestamp: Date.now(), edit: false},
         ], 
 
         status: 'all',
@@ -110,7 +110,6 @@ class App extends Component {
         })
       }
 
-
     render(){
         const { data, status, inputLabel} = this.state
     
@@ -127,7 +126,8 @@ class App extends Component {
                 <TaskList 
                     data={ filtered }
                     onDeleted={ this.deleteItem }
-                    onToggleDone={ this.onToggleDone }    
+                    onToggleDone={ this.onToggleDone }
+                       
                 />
                 <Footer 
                     data={ data }

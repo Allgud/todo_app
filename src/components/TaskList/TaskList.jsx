@@ -15,6 +15,7 @@ const TaskList = (props) => {
     return (
         <Task
           key={ id }
+          id = {id}
           { ...elProps }
           onDeleted={() => onDeleted(id)}
           onToggleDone={() => onToggleDone(id)}

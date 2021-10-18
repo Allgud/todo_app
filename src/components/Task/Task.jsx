@@ -1,7 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/jsx-no-comment-textnodes */
 import React from "react";
 import PropTypes from 'prop-types'
 
@@ -12,7 +8,7 @@ import './task.css'
 const Task = (props) => {
    
     const { label, onDeleted, onToggleDone, done, timestamp } = props
-    
+   
     const time = formatDistance(timestamp, Date.now(), { includeSeconds: true, addSuffix: true })
     
     let classNames = ''
@@ -23,16 +19,20 @@ const Task = (props) => {
     return (
         <li 
           className={ classNames }
-          
           > 
           <div 
               className="view"   
           >
             <input 
               className="toggle" 
-              type="checkbox" />
+              type="checkbox"
+              checked={ done }
+              onChange={ onToggleDone }  
+            />
             <label
               onClick={ onToggleDone }
+              onKeyDown = {() => {}}
+              role="presentation"
             >
               <span 
                 className="description"
@@ -43,25 +43,29 @@ const Task = (props) => {
             </label>
             <button 
               type="button"
+              aria-label="edit"
               className="icon icon-edit"
              />
           
             <button 
               type="button"
+              aria-label="delete"
               className="icon icon-destroy"
-              onClick={ onDeleted }  
+              onClick={ onDeleted } 
+              onKeyDown = {() => {}} 
              />
           </div>
       </li>
     )
   }
 
+
 Task.propTypes = {
   label: PropTypes.string.isRequired,
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
   done: PropTypes.bool.isRequired,
-  timestamp: PropTypes.number.isRequired
+  timestamp: PropTypes.number.isRequired, 
 }
 
 export default Task

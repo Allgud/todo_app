@@ -24,6 +24,19 @@
     "jsx-a11y/label-has-associated-control": [ "error", {
       "assert": "either"
     }],
+    "jsx-a11y/no-noninteractive-element-interactions": [
+      "error",
+      {
+        "handlers": [
+          "onClick",
+          "onMouseDown",
+          "onMouseUp",
+          "onKeyPress",
+          "onKeyDown",
+          "onKeyUp"
+        ]
+      }
+    ],
     "react/state-in-constructor": ["off"],
     "react/jsx-props-no-spreading": ["off"],
     "react/static-property-placement": "off",
