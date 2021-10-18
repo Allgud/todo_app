@@ -8,15 +8,13 @@ import './taskList.css'
 const TaskList = (props) => {
 
     const { data, onDeleted, onToggleDone } = props
-
-    // eslint-disable-next-line react/prop-types
-    const elements = data.map((el, i) => {
+    
+    const elements = data.map((el) => {
       const { id, ...elProps } = el
       
     return (
         <Task
-          // eslint-disable-next-line react/no-array-index-key
-          key={ i }
+          key={ id }
           { ...elProps }
           onDeleted={() => onDeleted(id)}
           onToggleDone={() => onToggleDone(id)}

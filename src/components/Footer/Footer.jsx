@@ -1,5 +1,5 @@
-/* eslint-disable react/prop-types */
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import TaskFilters from '../TaskFilters/TaskFilters'
 
@@ -25,6 +25,13 @@ const Footer = (props) => {
           </footer>
       )
       
+}
+
+Footer.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onClearCompleted: PropTypes.func.isRequired,
+  onFilterClick: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired
 }
 
 export default Footer

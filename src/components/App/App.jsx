@@ -10,8 +10,6 @@ import './app.css'
 
 class App extends Component {
 
-    idGenerator = 5
-
     state = {
         data: [
             {label: "Completed task", id: 1, done: false, timestamp: Date.now()},
@@ -20,15 +18,14 @@ class App extends Component {
             {label: "Something else", id: 4, done: false, timestamp: Date.now()},
         ], 
 
-        status: 'all'
+        status: 'all',
+        
+        inputLabel: ''
     }
-
-   
 
     createTask = (label) => ({
             label: label[0].toUpperCase() + label.slice(1).toLowerCase(),
-            // eslint-disable-next-line no-plusplus
-            id: this.idGenerator++,
+            id: Date.now(),
             done: false,
             timestamp: Date.now()
         })
@@ -45,8 +42,7 @@ class App extends Component {
     }
 
     addItem = (text) => {
-        
-        if(!text) return
+        if(!text || text.trim() === '') return
         const newTask = this.createTask(text)
         this.setState(({data}) => {
             const newData = [...data, newTask]
@@ -79,19 +75,18 @@ class App extends Component {
         })
     }
 
-    onFiltered = (status) => {
-        // eslint-disable-next-line react/destructuring-assignment
-        const arr = this.state.data
+    onFiltered = () => {
+        const { data, status } = this.state
         if(status === 'active'){
             this.status += 'active'
-            return arr.filter(el => el.done !== true)
+            return data.filter(el => el.done !== true)
         }
         if(status === 'completed'){
             this.status += 'complete'
-            return arr.filter(el => el.done === true)
+            return data.filter(el => el.done === true)
         }
         this.status += 'all'
-        return arr
+        return data
     }
     
     statusListener = (str) => {
@@ -100,18 +95,34 @@ class App extends Component {
        })
     }
 
+    onLabelChange = (evt) => {
+        this.setState({
+          inputLabel: evt.target.value
+        })
+      }
+
+      onSubmit = (evt) => {
+        const { inputLabel } = this.state
+        evt.preventDefault()
+        this.addItem(inputLabel)
+        this.setState({
+          inputLabel: ''
+        })
+      }
+
 
     render(){
-        const { data, status } = this.state
+        const { data, status, inputLabel} = this.state
     
-        const filtered = this.onFiltered(status)
+        const filtered = this.onFiltered()
         
         return (
-            // eslint-disable-next-line react/jsx-filename-extension
             <section className="todoapp">
                 <Header />
-                <NewTaskForm 
-                    onAdded={ this.addItem }
+                <NewTaskForm
+                    onLabelChange = { this.onLabelChange } 
+                    onSubmit = { this.onSubmit }
+                    value={ inputLabel }
                 />
                 <TaskList 
                     data={ filtered }
