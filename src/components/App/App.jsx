@@ -114,15 +114,15 @@ class App extends Component {
 
       onToggleEdit = (id) => {
         this.setState(({ data }) => {  
-            const index = data.findIndex(el => el.id === id)
-            const old = data[index]  
-            const newItem = {...old, edit: true} 
-            const newArr = this.sliceArr(data, index, newItem)
-            return {
-                data: newArr,
-                editingLabel: old.label
-            }
-        })
+               const index = data.findIndex(el => el.id === id)
+               const old = data[index]  
+               const newItem = {...old, edit: true} 
+               const newArr = this.sliceArr(data, index, newItem)
+               return {
+                   data: newArr,
+                   editingLabel: old.label
+               }
+          })
       }
 
       handleEditingChange = (evt) => {  
@@ -134,8 +134,14 @@ class App extends Component {
       handleEditDone = (evt) => {
           if(evt.keyCode === 13){
              this.setState(({data}) => {
-                 const editingData = data.map((el) => 
-                      el.edit ? {...el, edit:!el.edit, label: evt.target.value} : el
+                 const editingData = data.map((el) =>{
+                     let val = evt.target.value
+                    if(val.trim() === ''){
+                       val = 'Empty todo'
+                    } 
+                    return el.edit ? {...el, edit:!el.edit, label: val} : el
+                 }
+                     
                  )
                  return {
                      data: editingData,
