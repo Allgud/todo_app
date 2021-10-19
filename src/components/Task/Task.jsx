@@ -17,7 +17,6 @@ const Task = (props) => {
     if(edit){
       classNames += 'editing'
     }
-    
     return (
         <li 
           className={ classNames }

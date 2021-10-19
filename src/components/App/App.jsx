@@ -56,16 +56,9 @@ class App extends Component {
 
     onToggleDone = (id) => {
         
-        this.setState(({ data }) => {  
-            const index = data.findIndex(el => el.id === id)
-            const old = data[index] 
-            
-            const newItem = {...old, done: !old.done} 
-            const newArr = this.sliceArr(data, index, newItem)
-            return {
-                data: newArr
-            }
-        })
+        this.setState(({ data }) => ({  
+           data: data.map(el => el.id === id ? {...el, done:!el.done} : el)
+        }))
     }
 
     onFiltered = () => {
@@ -75,7 +68,7 @@ class App extends Component {
             return data.filter(el => el.done !== true)
         }
         if(status === 'completed'){
-            this.status += 'complete'
+            this.status += 'completed'
             return data.filter(el => el.done === true)
         }
         this.status += 'all'
@@ -104,17 +97,12 @@ class App extends Component {
       }
 
       onToggleEdit = (id) => {
-        this.setState(({ data }) => {  
-               const index = data.findIndex(el => el.id === id)
-               const old = data[index]  
-               const newItem = {...old, edit: true} 
-               const newArr = this.sliceArr(data, index, newItem)
-               return {
-                   data: newArr,
-                   editingLabel: old.label
-               }
-          })
-      }
+        this.setState(({ data }) => ({
+                data: data.map(el => el.id === id ? {...el, edit:true} : el),
+                editingLabel: data.filter(el => el.id === id)[0].label
+            }))
+    } 
+            
 
       handleEditingChange = (evt) => {  
         this.setState({
