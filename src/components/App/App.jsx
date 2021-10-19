@@ -20,7 +20,9 @@ class App extends Component {
 
         status: 'all',
         
-        inputLabel: ''
+        inputLabel: '',
+
+        editingLabel: ''
     }
 
     createTask = (label) => ({
@@ -110,8 +112,41 @@ class App extends Component {
         })
       }
 
+      onToggleEdit = (id) => {
+        this.setState(({ data }) => {  
+            const index = data.findIndex(el => el.id === id)
+            const old = data[index]  
+            const newItem = {...old, edit: true} 
+            const newArr = this.sliceArr(data, index, newItem)
+            return {
+                data: newArr,
+                editingLabel: old.label
+            }
+        })
+      }
+
+      handleEditingChange = (evt) => {  
+        this.setState({
+            editingLabel: evt.target.value
+        })
+      }
+
+      handleEditDone = (evt) => {
+          if(evt.keyCode === 13){
+             this.setState(({data}) => {
+                 const editingData = data.map((el) => 
+                      el.edit ? {...el, edit:!el.edit, label: evt.target.value} : el
+                 )
+                 return {
+                     data: editingData,
+                     editingLabel: ''
+                 }
+             })
+          }
+      }
+
     render(){
-        const { data, status, inputLabel} = this.state
+        const { data, status, inputLabel, editingLabel } = this.state
     
         const filtered = this.onFiltered()
         
@@ -127,7 +162,10 @@ class App extends Component {
                     data={ filtered }
                     onDeleted={ this.deleteItem }
                     onToggleDone={ this.onToggleDone }
-                       
+                    onToggleEdit = { this.onToggleEdit }
+                    onEditDone = { this.handleEditDone }
+                    onEditChange = { this.handleEditingChange }
+                    editingLabel = { editingLabel }     
                 />
                 <Footer 
                     data={ data }
