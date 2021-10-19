@@ -35,32 +35,23 @@ class App extends Component {
     sliceArr = (arr, index, item) => item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] : [...arr.slice(0, index), ...arr.slice(index + 1)]
 
     deleteItem = (id) => {
-        this.setState(({data}) => {
-            const newList = data.filter(el => el.id !== id)
-            return {
-                data: newList
-            }
-        })
+        this.setState(({data}) => ({
+                data: data.filter(el => el.id !== id)
+            }))
     }
 
     addItem = (text) => {
         if(!text || text.trim() === '') return
-        const newTask = this.createTask(text)
-        this.setState(({data}) => {
-            const newData = [...data, newTask]
-            return {
-                data: newData
-            }
-        })
+        this.setState(({data}) => ({
+                data: [...data, this.createTask(text)]
+            }))
     }
+        
 
     clearCompleted = () => {
-        this.setState(({ data }) => {
-            const notCompleted = data.filter(el => el.done === false)
-            return {
-                data: notCompleted
-            }
-        })
+        this.setState(({ data }) => ({
+                data: data.filter(el => el.done === false)
+            }))
     }
 
     onToggleDone = (id) => {
@@ -93,7 +84,7 @@ class App extends Component {
     
     statusListener = (str) => {
        this.setState({
-           status: str
+           status: str.toLowerCase()
        })
     }
 

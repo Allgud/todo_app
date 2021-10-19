@@ -5,45 +5,31 @@ import './taskFilters.css'
 
 const TaskFilters = (props) => {
   
-    const buttons = document.querySelectorAll('.filters li button')
-  
     const { status, statusListener } = props
 
-    for(const btn of buttons){
-      if(btn.textContent.toLowerCase() === status){
-        btn.className = 'selected'
-      }else {
-        btn.className = ''
+    const buttonsValues = ['All', 'Active', 'Completed'].map((btn, i) => {
+      const index = i + 1
+      let classNames =  ''
+      if(status === btn.toLowerCase()){
+        classNames += 'selected'
       }
-    }
+      return (
+      <li key = {index}>
+        <button
+          className={ classNames }
+          type="button"
+          onClick = { (evt) => statusListener(evt.target.textContent) }
+        >
+          { btn }
+        </button>
+      </li>
+    )})
+
     return (
       <ul 
         className="filters"
       >
-        <li>
-          <button
-          type="button"
-          onClick = { () => statusListener('all') }
-          >
-            All
-          </button>
-        </li>
-        <li >
-          <button
-          type="button"
-           onClick = { () => statusListener('active') }
-          >
-            Active
-          </button>
-        </li>
-        <li>
-          <button
-          type="button"
-           onClick = { () => statusListener('completed') } 
-          >
-            Completed
-          </button>
-        </li>
+       { buttonsValues }
       </ul>
     )
   } 
