@@ -12,10 +12,9 @@ class App extends Component {
 
     state = {
         data: [
-            {label: "Completed task", id: 1, done: false, timestamp: Date.now(), edit: false},
-            {label: "Editing task", id: 2, done: false, timestamp: Date.now(), edit: false},
-            {label: "Active task", id: 3, done: false, timestamp: Date.now(), edit: false},
-            {label: "Something else", id: 4, done: false, timestamp: Date.now(), edit: false},
+            {label: "fw", id: 1, done: false, timestamp: Date.now(), edit: false},
+            {label: "fw", id: 2, done: false, timestamp: Date.now(), edit: false},
+            {label: "fw", id: 3, done: false, timestamp: Date.now(), edit: false}
         ], 
 
         status: 'all',

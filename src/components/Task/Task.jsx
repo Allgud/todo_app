@@ -30,17 +30,21 @@ const Task = (props) => {
               checked={ done }
               onChange={ onToggleDone }  
             />
-            <label
-              onClick={ onToggleDone }
-              role="presentation"
-            >
+            <label>
               <span 
-                className="description"
+                className="title"
+                onClick={ onToggleDone }
+                role="presentation"
                 >
                   { label }
               </span>
+              <span className="description">
+                <button className="icon icon-play" aria-label="play" type="button"/>
+                <button className="icon icon-pause" aria-label="pause" type="button"/>
+                12:25
+              </span>
               <span 
-                className="created"
+                className="description"
               >
                 created { formatDistance(timestamp, Date.now(), { includeSeconds: true, addSuffix: true }) }
               </span>

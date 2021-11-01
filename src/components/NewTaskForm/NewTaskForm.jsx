@@ -8,15 +8,18 @@ const NewTaskForm = (props) => {
     
     return (
       <form
+        className="new-todo-form"
         onSubmit={ (evt) => onSubmit(evt) }
       >
         <input
          type='text'
          className="new-todo"
-         placeholder="What needs to be done?"
+         placeholder="Task"
          onChange={ (evt) => onLabelChange(evt) }
          value={ value }
         />
+        <input className="new-todo-form__timer" placeholder="Min" />
+        <input className="new-todo-form__timer" placeholder="Sec" />
       </form>
     )
 }
