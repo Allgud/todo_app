@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types'
 
-import { formatDistance } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns'
 
 import './task.css'
-
-
 
 class Task extends Component {
 
   state = {
-    minutes: 0,
-    seconds: 0,
-    timer: null,
+    timer: null
   }
 
   componentDidUpdate(){
@@ -23,33 +19,11 @@ class Task extends Component {
     }
   }
 
-  startTimer = () => {
-    const interval = setInterval(() => {
-      let { minutes, seconds } = this.state
-      seconds += 1
-      if(seconds === 60){
-        seconds = 0
-        minutes +=1
-      }
-      this.setState({
-        minutes,
-        seconds
-      })
-    }, 1000)
-    this.setState({
-      timer: interval,
-    })
-  }
-
-  pauseTimer = () => {
-    const { timer } = this.state
-    clearInterval(timer)
-  }
-
    render(){
-    const { minutes, seconds } = this.state
-    const { label, onDeleted, onToggleDone, done, timestamp, 
-      edit, onToggleEdit, onEditDone, onEditChange, editingLabel } = this.props
+    const { ...elProps } = this.props 
+    const { done, onDeleted, onToggleDone, onToggleEdit, onEditDone, onEditChange, editingLabel } = this.props
+    const { label, edit, timestamp, min, sec } = elProps
+
     let classNames = ''
     if(done){
       classNames += 'completed'
@@ -57,6 +31,7 @@ class Task extends Component {
     if(edit){
       classNames += 'editing'
     }
+
   return (
         <li 
           className={ classNames }
@@ -65,10 +40,10 @@ class Task extends Component {
             className="view"   
           >
             <input 
-            className="toggle" 
-            type="checkbox"
-            checked={ done }
-            onChange={ onToggleDone }  
+              className="toggle" 
+              type="checkbox"
+              checked={ done }
+              onChange={ onToggleDone }  
             />
             <label>
               <span 
@@ -78,7 +53,7 @@ class Task extends Component {
               >
                 { label }
               </span>
-              <span className="description">
+              <span className="time">
                 <button 
                   className="icon icon-play" 
                   aria-label="play" 
@@ -89,14 +64,16 @@ class Task extends Component {
                   className="icon icon-pause" 
                   aria-label="pause" 
                   type="button"
-                  onClick={this.pauseTimer}
+                  onClick={ this.pauseTimer }
                 />
-                { minutes }:{ seconds }
+                <span className="description">
+                  { (min >= 10) ? min : `0${min}`}:{ (sec >= 10) ? sec : `0${sec}`}
+                </span>
               </span>
               <span 
                 className="description"
               >
-                created { formatDistance(timestamp, Date.now(), { includeSeconds: true, addSuffix: true }) }
+                created { formatDistanceToNow(new Date(timestamp), { addSuffix: true }) }
               </span>
             </label>
             <button 
@@ -126,16 +103,14 @@ class Task extends Component {
 
 
 Task.propTypes = {
-  label: PropTypes.string.isRequired,
-  edit: PropTypes.bool.isRequired,
+  
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
-  done: PropTypes.bool.isRequired,
-  timestamp: PropTypes.number.isRequired,
   onToggleEdit: PropTypes.func.isRequired,
   onEditDone: PropTypes.func.isRequired,
   onEditChange: PropTypes.func.isRequired,
-  editingLabel: PropTypes.string.isRequired
+  editingLabel: PropTypes.string.isRequired,
+  done: PropTypes.bool.isRequired
 }
 
 export default Task

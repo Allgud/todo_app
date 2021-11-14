@@ -12,12 +12,13 @@ const TaskList = (props) => {
           editingLabel } = props
     
     const elements = data.map((el) => {
-      const { id, ...elProps } = el
+      const { id, timestamp, ...elProps } = el
       
     return (
         <Task
-          key={ id }
-          id = {id}
+          key={ timestamp }
+          id = { id }
+          timestamp = { timestamp }
           { ...elProps }
           editingLabel = { editingLabel }
           onDeleted={() => onDeleted(id)}
@@ -45,7 +46,7 @@ TaskList.propTypes = {
   onToggleEdit: PropTypes.func.isRequired,
   onEditDone: PropTypes.func.isRequired,
   onEditChange: PropTypes.func.isRequired,
-  editingLabel: PropTypes.string.isRequired
+  editingLabel: PropTypes.string.isRequired,
 }
 
 

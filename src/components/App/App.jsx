@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
+
 import TaskList from '../TaskList/TaskList'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
@@ -12,26 +13,29 @@ class App extends Component {
 
     state = {
         data: [
-            {label: "fw", id: 1, done: false, timestamp: Date.now(), edit: false},
-            {label: "fw", id: 2, done: false, timestamp: Date.now(), edit: false},
-            {label: "fw", id: 3, done: false, timestamp: Date.now(), edit: false}
+            {label: "fw", id: 1, done: false, timestamp: 1636890577423, edit: false, min: 15, sec: 0},
+            {label: "fw", id: 2, done: false, timestamp: 1636890577424, edit: false, min: 10, sec: 0},
+            {label: "fw", id: 3, done: false, timestamp: 1636890577425, edit: false, min: 5, sec: 0}
         ], 
-
-        status: 'all',
-        
+        status: 'all', 
         inputLabel: '',
-
-        editingLabel: ''
+        editingLabel: '',
+        minutes: '',
+        seconds: ''
     }
 
-    createTask = (label) => ({
+    createTask = (label, mins, secs) => ({
             label: label[0].toUpperCase() + label.slice(1).toLowerCase(),
             id: Date.now(),
             done: false,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            edit: false,
+            min: mins,
+            sec: secs
         })
 
-    sliceArr = (arr, index, item) => item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] : [...arr.slice(0, index), ...arr.slice(index + 1)]
+    sliceArr = (arr, index, item) => item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] 
+                                            : [...arr.slice(0, index), ...arr.slice(index + 1)]
 
     deleteItem = (id) => {
         this.setState(({data}) => ({
@@ -39,10 +43,10 @@ class App extends Component {
             }))
     }
 
-    addItem = (text) => {
+    addItem = (text, mins, secs) => {
         if(!text || text.trim() === '') return
         this.setState(({data}) => ({
-                data: [...data, this.createTask(text)]
+                data: [...data, this.createTask(text, mins, secs)]
             }))
     }
         
@@ -81,18 +85,19 @@ class App extends Component {
     }
 
     onLabelChange = (evt) => {
-        this.setState({
-          inputLabel: evt.target.value
-        })
+        const { name, value } = evt.target 
+        this.setState({ [name]: value })
       }
 
       onSubmit = (evt) => {
-        const { inputLabel } = this.state
+        const { inputLabel, minutes, seconds } = this.state
         evt.preventDefault()
-        this.addItem(inputLabel)
+        this.addItem(inputLabel, minutes, seconds)
         this.setState({
-          inputLabel: ''
-        })
+          inputLabel: '',
+          minutes: '',
+          seconds: ''
+        }) 
       }
 
       onToggleEdit = (id) => {
@@ -130,7 +135,7 @@ class App extends Component {
       }
 
     render(){
-        const { data, status, inputLabel, editingLabel } = this.state
+        const { data, status, inputLabel, editingLabel, minutes, seconds } = this.state
     
         const filtered = this.onFiltered()
         
@@ -140,7 +145,10 @@ class App extends Component {
                 <NewTaskForm
                     onLabelChange = { this.onLabelChange } 
                     onSubmit = { this.onSubmit }
-                    value={ inputLabel }
+                    inputLabel={ inputLabel }
+                    getMinutes={ this.getMinutes }
+                    minutes={ minutes } 
+                    seconds={ seconds } 
                 />
                 <TaskList 
                     data={ filtered }
@@ -149,7 +157,7 @@ class App extends Component {
                     onToggleEdit = { this.onToggleEdit }
                     onEditDone = { this.handleEditDone }
                     onEditChange = { this.handleEditingChange }
-                    editingLabel = { editingLabel }     
+                    editingLabel = { editingLabel }
                 />
                 <Footer 
                     data={ data }
