@@ -15,8 +15,12 @@ export default class Timer extends Component{
 
     componentDidUpdate(){
         const { onTimer } = this.state
+        const { done } = this.props
         if(onTimer){
             this.updateTime()
+        }
+        if( done && onTimer ){
+            this.stop()
         }
     }
 
@@ -62,7 +66,7 @@ export default class Timer extends Component{
 
         const { id, stopTimer } = this.props
         const { minutes, seconds, onTimer } = this.state
-
+        
         return (
             <span className="time">
             <button 
@@ -96,5 +100,5 @@ Timer.propTypes = {
     sec: PropTypes.number.isRequired,
     id: PropTypes.number.isRequired,
     stopTimer: PropTypes.func.isRequired,
-    // done: PropTypes.bool.isRequired
+    done: PropTypes.bool.isRequired
 }
