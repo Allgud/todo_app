@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 
-
 import TaskList from '../TaskList/TaskList'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import NewTaskForm from '../NewTaskForm/NewTaskForm'
+import { Provider } from '../../context'
 
 import './app.css'
 
@@ -15,7 +15,7 @@ class App extends Component {
         data: [
             {label: "fw", id: 1, done: false, timestamp: 1636890577423, edit: false, min: 15, sec: 0},
             {label: "fw", id: 2, done: false, timestamp: 1636890577424, edit: false, min: 10, sec: 0},
-            {label: "fw", id: 3, done: false, timestamp: 1636890577425, edit: false, min: 5, sec: 0}
+            {label: "fw", id: 3, done: false, timestamp: 1636890577425, edit: false, min: 1, sec: 5}
         ], 
         status: 'all', 
         inputLabel: '',
@@ -23,6 +23,7 @@ class App extends Component {
         minutes: '',
         seconds: ''
     }
+    
 
     createTask = (label, mins, secs) => ({
             label: label[0].toUpperCase() + label.slice(1).toLowerCase(),
@@ -33,9 +34,6 @@ class App extends Component {
             min: mins,
             sec: secs
         })
-
-    sliceArr = (arr, index, item) => item ? [...arr.slice(0, index), item, ...arr.slice(index + 1)] 
-                                            : [...arr.slice(0, index), ...arr.slice(index + 1)]
 
     deleteItem = (id) => {
         this.setState(({data}) => ({
@@ -87,9 +85,9 @@ class App extends Component {
     onLabelChange = (evt) => {
         const { name, value } = evt.target 
         this.setState({ [name]: value })
-      }
+    }
 
-      onSubmit = (evt) => {
+    onSubmit = (evt) => {
         const { inputLabel, minutes, seconds } = this.state
         evt.preventDefault()
         this.addItem(inputLabel, minutes, seconds)
@@ -98,41 +96,44 @@ class App extends Component {
           minutes: '',
           seconds: ''
         }) 
-      }
+    }
 
-      onToggleEdit = (id) => {
+    onToggleEdit = (id) => {
         this.setState(({ data }) => ({
                 data: data.map(el => el.id === id ? {...el, edit:true} : el),
                 editingLabel: data.filter(el => el.id === id)[0].label
             }))
     } 
             
-
-      handleEditingChange = (evt) => {  
+    handleEditingChange = (evt) => {  
         this.setState({
             editingLabel: evt.target.value
         })
-      }
+    }
 
-      handleEditDone = (evt) => {
-          if(evt.keyCode === 13){
-             this.setState(({data}) => {
-                 const editingData = data.map((el) =>{
-                     let val = evt.target.value
+    handleEditDone = (evt) => {
+        if(evt.keyCode === 13){
+            this.setState(({data}) => {
+                const editingData = data.map((el) =>{
+                    let val = evt.target.value
                     if(val.trim() === ''){
                        val = 'Empty todo'
                     } 
                     return el.edit ? {...el, edit:!el.edit, label: val} : el
-                 }
-                     
-                 )
-                 return {
+                })
+                return {
                      data: editingData,
                      editingLabel: ''
-                 }
-             })
-          }
-      }
+                }
+            })
+        }
+    }
+
+    stopTimer = (id, min, sec) => {
+        this.setState(({ data }) => ({
+            data: data.map(el => el.id === id ? { ...el, min, sec } : el)
+        }))
+    }
 
     render(){
         const { data, status, inputLabel, editingLabel, minutes, seconds } = this.state
@@ -141,33 +142,36 @@ class App extends Component {
         
         return (
             <section className="todoapp">
-                <Header />
-                <NewTaskForm
-                    onLabelChange = { this.onLabelChange } 
-                    onSubmit = { this.onSubmit }
-                    inputLabel={ inputLabel }
-                    getMinutes={ this.getMinutes }
-                    minutes={ minutes } 
-                    seconds={ seconds } 
-                />
-                <TaskList 
-                    data={ filtered }
-                    onDeleted={ this.deleteItem }
-                    onToggleDone={ this.onToggleDone }
-                    onToggleEdit = { this.onToggleEdit }
-                    onEditDone = { this.handleEditDone }
-                    onEditChange = { this.handleEditingChange }
-                    editingLabel = { editingLabel }
-                />
-                <Footer 
-                    data={ data }
-                    status={ status }
-                    onClearCompleted={ this.clearCompleted }
-                    onFilterClick = { this.statusListener }
-                />
+                <Provider value={{ data }}>
+                    <Header />
+                    <NewTaskForm
+                        onLabelChange = { this.onLabelChange } 
+                        onSubmit = { this.onSubmit }
+                        inputLabel={ inputLabel }
+                        minutes={ minutes } 
+                        seconds={ seconds } 
+                    />
+                    <TaskList 
+                        data={ filtered }
+                        onDeleted={ this.deleteItem }
+                        onToggleDone={ this.onToggleDone }
+                        onToggleEdit = { this.onToggleEdit }
+                        onEditDone = { this.handleEditDone }
+                        onEditChange = { this.handleEditingChange }
+                        editingLabel = { editingLabel }
+                        stopTimer = { this.stopTimer }
+                    />
+                    <Footer 
+                        data={ data }
+                        status={ status }
+                        onClearCompleted={ this.clearCompleted }
+                        onFilterClick = { this.statusListener }
+                    />  
+                </Provider>
             </section>
         )
     }
+
 }
 
 export default App

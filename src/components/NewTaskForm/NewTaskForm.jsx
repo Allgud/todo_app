@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import './newTaskForm.css'
 
-const NewTaskForm = (props) => {
+const NewTaskForm = props => {
     const { inputLabel, onSubmit, onLabelChange, minutes, seconds } = props
     
     return (

@@ -1,28 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from 'prop-types'
 
 import { formatDistanceToNow } from 'date-fns'
 
+import { Consumer } from '../../context'
+
+import Timer from '../Timer/Timer'
+
+
 import './task.css'
 
-class Task extends Component {
+const Task = props => {
 
-  state = {
-    timer: null
-  }
-
-  componentDidUpdate(){
-    const { done } = this.props
-    const { timer } = this.state
-    if(done){
-      clearInterval(timer)
-    }
-  }
-
-   render(){
-    const { ...elProps } = this.props 
-    const { done, onDeleted, onToggleDone, onToggleEdit, onEditDone, onEditChange, editingLabel } = this.props
-    const { label, edit, timestamp, min, sec } = elProps
+    const { ...elProps } = props 
+    const { done, onDeleted, onToggleDone, onToggleEdit, 
+            onEditDone, onEditChange, editingLabel, stopTimer } = props
+    const { label, edit, timestamp, id } = elProps
 
     let classNames = ''
     if(done){
@@ -53,23 +46,22 @@ class Task extends Component {
               >
                 { label }
               </span>
-              <span className="time">
-                <button 
-                  className="icon icon-play" 
-                  aria-label="play" 
-                  type="button"
-                  onClick={ this.startTimer }
-                />
-                <button 
-                  className="icon icon-pause" 
-                  aria-label="pause" 
-                  type="button"
-                  onClick={ this.pauseTimer }
-                />
-                <span className="description">
-                  { (min >= 10) ? min : `0${min}`}:{ (sec >= 10) ? sec : `0${sec}`}
-                </span>
-              </span>
+              <Consumer>
+                  {
+                   ({ data }) => {
+                      const { min, sec } = data.filter(el => el.id === id)[0]
+                      return (
+                        <Timer 
+                          min={ Number(min) }
+                          sec={ Number(sec) }
+                          id={ id }
+                          stopTimer = { stopTimer }
+                          done={ done }
+                        />
+                      )
+                    }
+                  }
+              </Consumer>
               <span 
                 className="description"
               >
@@ -98,19 +90,18 @@ class Task extends Component {
           />   
         </li>
     )
-  }
 }
 
-
 Task.propTypes = {
-  
   onDeleted: PropTypes.func.isRequired,
   onToggleDone: PropTypes.func.isRequired,
   onToggleEdit: PropTypes.func.isRequired,
   onEditDone: PropTypes.func.isRequired,
   onEditChange: PropTypes.func.isRequired,
   editingLabel: PropTypes.string.isRequired,
-  done: PropTypes.bool.isRequired
+  done: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
+  stopTimer: PropTypes.func.isRequired
 }
 
 export default Task
